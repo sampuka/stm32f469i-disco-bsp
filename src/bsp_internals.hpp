@@ -1,7 +1,7 @@
 #ifndef BSP_INCLUDE_BSP_INTERNALS_HPP
 #define BSP_INCLUDE_BSP_INTERNALS_HPP
 
-#include "hal/hal_gpio.hpp"
+#include "hal_gpio.hpp"
 
 namespace bsp
 {

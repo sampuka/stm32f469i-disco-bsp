@@ -14,13 +14,15 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
-file(GLOB_RECURSE BSP_FILES REQUIRE_DEPENDS "src/*.hpp" "src/*.cpp")
+add_subdirectory(stm32f469-hal)
+
+file(GLOB_RECURSE BSP_FILES REQUIRE_DEPENDS "src/*.hpp" "src/*.cpp" "include/*.hpp" "include/*.cpp")
 
 message(NOTICE "List of all sources: ${BSP_FILES}")
 
 add_library(stm32f469i-disco-bsp STATIC ${BSP_FILES})
 set_target_properties(stm32f469i-disco-bsp PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(stm32f469i-disco-bsp PRIVATE "src/include" "src")
+target_include_directories(stm32f469i-disco-bsp PRIVATE "include" "src" "stm32f469-hal/src")
 
 target_compile_options(stm32f469i-disco-bsp PRIVATE
                        $<$<COMPILE_LANG_AND_ID:CXX,GNU>:

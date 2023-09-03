@@ -1,3 +1,4 @@
 [submodule "stm32f469-hal"]
 	path = stm32f469-hal
 	url = https://github.com/sampuka/stm32f469-hal.git
+	branch = main_project-separation
