@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "akiramiyakoda.cppincludeguard",
+        "llvm-vs-code-extensions.vscode-clangd",
+        "ms-vscode.cmake-tools"
+    ]
+}
