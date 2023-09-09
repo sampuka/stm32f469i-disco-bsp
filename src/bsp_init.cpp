@@ -21,6 +21,10 @@ void init()
 	ld2.setup_for_output();
 	ld3.setup_for_output();
 	ld4.setup_for_output();
+	ld1.set_output_high();
+	ld2.set_output_high();
+	ld3.set_output_high();
+	ld4.set_output_high();
 }
 
 }  // namespace bsp
