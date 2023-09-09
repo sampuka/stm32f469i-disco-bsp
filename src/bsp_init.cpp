@@ -7,7 +7,9 @@ namespace bsp
 
 void init()
 {
-	*((uint32_t*)0x40023830) |= ((1 << 3) | (1 << 6) | (1 << 10));  // Enable GPIO D, G, K in RCC register
+	rcc.enable_gpio_d();
+	rcc.enable_gpio_g();
+	rcc.enable_gpio_k();
 
 	ld1.setup_for_output();
 	ld2.setup_for_output();

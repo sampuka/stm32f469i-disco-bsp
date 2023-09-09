@@ -2,9 +2,12 @@
 #define BSP_INCLUDE_BSP_INTERNALS_HPP
 
 #include "hal_gpio.hpp"
+#include "hal_rcc.hpp"
 
 namespace bsp
 {
+
+inline hal::Rcc& rcc = *new hal::Rcc;
 
 inline hal::Gpio& gpio_d = *new (hal::Gpio::GPIOD) hal::Gpio;
 inline hal::Gpio& gpio_g = *new (hal::Gpio::GPIOG) hal::Gpio;
