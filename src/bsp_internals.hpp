@@ -1,13 +1,16 @@
-#ifndef BSP_INCLUDE_BSP_INTERNALS_HPP
-#define BSP_INCLUDE_BSP_INTERNALS_HPP
+#ifndef SRC_BSP_INTERNALS_HPP
+#define SRC_BSP_INTERNALS_HPP
 
 #include "hal_gpio.hpp"
 #include "hal_rcc.hpp"
+#include "hal_timer.hpp"
 
 namespace bsp
 {
 
 inline hal::Rcc& rcc = *new hal::Rcc;
+
+inline hal::Timer& tim2 = *new hal::Timer;
 
 inline hal::Gpio& gpio_d = *new (hal::Gpio::GPIOD) hal::Gpio;
 inline hal::Gpio& gpio_g = *new (hal::Gpio::GPIOG) hal::Gpio;
@@ -20,4 +23,4 @@ inline hal::GpioPin ld4(gpio_k, 3);
 
 }  // namespace bsp
 
-#endif  // BSP_INCLUDE_BSP_INTERNALS_HPP
+#endif  // SRC_BSP_INTERNALS_HPP

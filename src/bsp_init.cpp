@@ -7,6 +7,12 @@ namespace bsp
 
 void init()
 {
+	rcc.enable_tim2();
+
+	tim2.set_interrupt();
+
+	tim2.enable();
+
 	rcc.enable_gpio_d();
 	rcc.enable_gpio_g();
 	rcc.enable_gpio_k();
