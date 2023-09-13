@@ -7,6 +7,8 @@ namespace bsp
 
 void init()
 {
+	system_control.enable_systick();
+
 	rcc.enable_tim2();
 
 	tim2.set_interrupt();

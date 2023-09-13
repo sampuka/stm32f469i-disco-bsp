@@ -3,10 +3,13 @@
 
 #include "hal_gpio.hpp"
 #include "hal_rcc.hpp"
+#include "hal_system_control.hpp"
 #include "hal_timer.hpp"
 
 namespace bsp
 {
+
+inline hal::SystemControl& system_control = *new hal::SystemControl;
 
 inline hal::Rcc& rcc = *new hal::Rcc;
 
