@@ -4,7 +4,6 @@
 #include "hal_dsi.hpp"
 #include "hal_rcc.hpp"
 #include "hal_system_control.hpp"
-#include "hal_timer.hpp"
 
 namespace bsp
 {
