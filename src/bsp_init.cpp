@@ -12,12 +12,6 @@ void init()
 {
 	hal::system_control.enable_systick();
 
-	hal::rcc.enable_tim2();
-
-	hal::tim2.set_interrupt();
-
-	hal::tim2.enable();
-
 	hal::rcc.enable_gpio_d();
 	hal::rcc.enable_gpio_g();
 	hal::rcc.enable_gpio_k();
