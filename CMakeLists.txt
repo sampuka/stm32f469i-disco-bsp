@@ -22,7 +22,7 @@ message(NOTICE "List of all sources: ${BSP_FILES}")
 
 add_library(stm32f469i-disco-bsp STATIC ${BSP_FILES})
 set_target_properties(stm32f469i-disco-bsp PROPERTIES LINKER_LANGUAGE CXX)
-target_include_directories(stm32f469i-disco-bsp PRIVATE "include" "src" "stm32f469-hal/include")
+target_include_directories(stm32f469i-disco-bsp PRIVATE "include" "src" "stm32f469-hal/include" "stm32f469-hal/platform")
 
 target_link_libraries(stm32f469i-disco-bsp stm32f469-hal)
 

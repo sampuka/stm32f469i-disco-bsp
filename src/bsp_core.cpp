@@ -1,6 +1,7 @@
 #include "bsp_core.hpp"
 
 #include "bsp_internals.hpp"
+#include "hal_exceptions.hpp"
 
 namespace bsp
 {
@@ -14,7 +15,7 @@ void register_1ms_callback(void (*new_callback_1ms)(void))
 
 }  // namespace bsp
 
-extern "C" void SysTick_Handler()
+void SysTick_Handler()
 {
 	if (bsp::callback_1ms != nullptr)
 	{
