@@ -1,6 +1,7 @@
 #include "bsp_init.hpp"
 
 #include "bsp_internals.hpp"
+#include "hal_dsi.hpp"
 #include "hal_rcc.hpp"
 #include "hal_system_control.hpp"
 #include "hal_timer.hpp"
@@ -15,6 +16,7 @@ void init()
 	hal::rcc.enable_gpio_d();
 	hal::rcc.enable_gpio_g();
 	hal::rcc.enable_gpio_k();
+	hal::rcc.enable_dsi();
 
 	ld1.setup_for_output();
 	ld2.setup_for_output();
