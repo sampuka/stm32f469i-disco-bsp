@@ -15,7 +15,7 @@ void register_1ms_callback(void (*new_callback_1ms)(void))
 
 }  // namespace bsp
 
-void SysTick_Handler()
+void systick_exception()
 {
 	if (bsp::callback_1ms != nullptr)
 	{
