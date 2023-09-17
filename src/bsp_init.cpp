@@ -1,23 +1,26 @@
 #include "bsp_init.hpp"
 
 #include "bsp_internals.hpp"
+#include "hal_rcc.hpp"
+#include "hal_system_control.hpp"
+#include "hal_timer.hpp"
 
 namespace bsp
 {
 
 void init()
 {
-	system_control.enable_systick();
+	hal::system_control.enable_systick();
 
-	rcc.enable_tim2();
+	hal::rcc.enable_tim2();
 
-	tim2.set_interrupt();
+	hal::tim2.set_interrupt();
 
-	tim2.enable();
+	hal::tim2.enable();
 
-	rcc.enable_gpio_d();
-	rcc.enable_gpio_g();
-	rcc.enable_gpio_k();
+	hal::rcc.enable_gpio_d();
+	hal::rcc.enable_gpio_g();
+	hal::rcc.enable_gpio_k();
 
 	ld1.setup_for_output();
 	ld2.setup_for_output();
