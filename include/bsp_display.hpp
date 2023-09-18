@@ -9,7 +9,10 @@ class Display
 public:
 	Display() = default;
 
-	void power_on();
+	void init();
+
+private:
+	void configure_ltdc();
 };
 
 }  // namespace bsp
