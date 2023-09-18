@@ -89,20 +89,7 @@ void Display::configure_ltdc()
 
 	// Step 7: Configure the layer1/2 parameters
 	// Let's just set up one layer
-
-	// Step 7.1: Programming the layer window horizontal and vertical position in the LTDC_LxWHPCR and LTDC_WVPCR registers. The layer window must be in the active data area
-
-	// Step 7.2: Programming the pixel input format in the LTDC_LxPFCR register
-
-	// Step 7.3: Programming the color frame buffer start address in the LTDC_LxCFBAR register
-
-	// Step 7.4: Programming the line length and pitch of the color frame buffer in the LTDC_LxCFBLR register
-
-	// Step 7.5: Programming the number of lines of the color frame buffer in the LTDC_LxCFBLNR register
-
-	// Step 7.6: If needed, loading the CLUT with the RGB values and its address in the LTDC_LxCLUTWR register
-
-	// Step 7.7: If needed, configuring the default color and the blending factors respectively in the LTDC_LxDCCR and LTDC_LxBFCR registers
+	hal::ltcd.set_up_layer();
 
 	// Step 8: Enable layer1/2 and if needed the CLUT in the LTDC_LxCR register
 
