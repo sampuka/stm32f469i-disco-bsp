@@ -8,6 +8,19 @@
 namespace bsp
 {
 
+// Based on AN4861 Application Notes
+// "LCD-TFT timings extracted from ROCKTECH RK043FN48H datasheet"
+
+constexpr hal::DisplayTimings display_timings = {
+	.hsync_width = 1, .vsync_width = 10, .horizontal_back_porch = 43, .vertical_back_porch = 12, .horizontal_front_porch = 8, .vertical_front_porch = 4, .active_width = 800, .active_height = 480
+
+};
+
+FrameBuffer& Display::get_buffer()
+{
+	return buffer;
+}
+
 void Display::init()
 {
 	// Developed based on Chapter 18.14 of RM0386 Reference Manual
@@ -76,31 +89,35 @@ void Display::configure_ltdc()
 	// Already done when PLLSAI was configured in DSI init procedure (or at least if it was configured)
 
 	// Step 3: Configure the synchronous timings: VSYNC, HSYNC, vertical and horizontal back porch, active data area and the front porch timings following the panel datasheet
-	hal::ltdc.set_timing_registers();
+	hal::ltdc.set_timing_registers(display_timings);
 
 	// Step 4: Configure the synchronous signals and clock polarity in the LTDC_GCR register
 	// Let's hope defaults are good
 
 	// Step 5: If needed, configure the background color in the LTDC_BCCR register
-	// Not feeling very needy right now
+	// Not feeling very needy
 
 	// Step 6: Configure the needed interrupts in the LTDC_IER and LTDC_LIPCR register
 	hal::ltdc.enable_interrupts();
 
 	// Step 7: Configure the layer1/2 parameters
 	// Let's just set up one layer
-	hal::ltcd.set_up_layer();
+	hal::ltdc.set_up_layer(display_timings, buffer.get_start_address());
 
 	// Step 8: Enable layer1/2 and if needed the CLUT in the LTDC_LxCR register
+	hal::ltdc.enable_layer();
 
 	// Step 9: If needed, enable dithering and color keying respectively in the LTDC_GCR and LTDC_LxCKCR registers. They can be also enabled on the fly
+	// Not feeling very needy
 
 	// Step 10: Reload the shadow registers to active register through the LTDC_SRCR register
+	hal::ltdc.reload();
 
 	// Step 11: Enable the LCD-TFT controller in the LTDC_GCR register
+	hal::ltdc.enable();
 
-	// Step 12: All layer parameters can be modified on the fly except the CLUT. The new configuration has to be either reloaded immediately or during vertical blanking period by configuring the
-	// LTDC_SRCR register
+	// "All layer parameters can be modified on the fly except the CLUT. The new configuration has to be either reloaded immediately or during vertical blanking period by configuring the
+	// LTDC_SRCR register"
 }
 
 }  // namespace bsp
