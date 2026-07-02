@@ -33,4 +33,4 @@ target_compile_options(stm32f469i-disco-bsp PRIVATE
                         $<$<COMPILE_LANG_AND_ID:C,GNU>:
                         -std=c99>)
 
-target_compile_options(stm32f469i-disco-bsp PRIVATE -gdwarf-2 -mthumb -mcpu=cortex-m4 -ffunction-sections -fdata-sections -DNO_SYSTEMINIT -Wall -Wextra -O0)
+target_compile_options(stm32f469i-disco-bsp PRIVATE -gdwarf-4 -mthumb -mcpu=cortex-m4 -ffunction-sections -fdata-sections -DNO_SYSTEMINIT -Wall -Wextra -O0)
