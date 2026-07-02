@@ -13,18 +13,18 @@ namespace bsp
 namespace
 {
 
+// Board-level LCD reset wiring from UM1932: PH7 resets both the DSI LCD module
+// and touch controller on the STM32F469I Discovery.
 constexpr uint8_t lcd_reset_pin = 7;
 constexpr uint32_t lcd_reset_delay_cycles = 320000;
 constexpr uint32_t lcd_sleep_out_delay_cycles = lcd_reset_delay_cycles * 6;
 
+// DSI and LTDC clock choices mirror ST's STM32F469I Discovery BSP: two-lane DSI
+// at 62.5 MHz lane byte clock and an LTDC pixel clock of about 27.429 MHz.
 constexpr uint32_t dsi_virtual_channel_id = 0;
 constexpr uint32_t dsi_lane_byte_clock_khz = 62500;
 constexpr uint32_t ltdc_pixel_clock_khz = 27429;
 constexpr uint32_t dsi_tx_escape_clock_divider = dsi_lane_byte_clock_khz / 15620;
-
-constexpr uint8_t ltdc_background_red = 0x00;
-constexpr uint8_t ltdc_background_green = 0x80;
-constexpr uint8_t ltdc_background_blue = 0x20;
 
 enum class LcdController
 {
@@ -32,6 +32,7 @@ enum class LcdController
 	NT35510,
 };
 
+// OTM8009A timing set from ST's Discovery BSP for the original 800x480 DSI LCD.
 constexpr hal::DisplayTimings otm8009a_timings = {.hsync_width = 2,
                                                   .vsync_width = 1,
                                                   .horizontal_back_porch = 34,
@@ -41,6 +42,8 @@ constexpr hal::DisplayTimings otm8009a_timings = {.hsync_width = 2,
                                                   .active_width = 800,
                                                   .active_height = 480};
 
+// NT35510 timing set from ST's B-LCD40-DSI1 support. This board variant uses a
+// tall vertical blanking interval; using OTM8009A vertical timings leaves it black.
 constexpr hal::DisplayTimings nt35510_timings = {.hsync_width = 2,
                                                  .vsync_width = 120,
                                                  .horizontal_back_porch = 34,
@@ -50,6 +53,8 @@ constexpr hal::DisplayTimings nt35510_timings = {.hsync_width = 2,
                                                  .active_width = 800,
                                                  .active_height = 480};
 
+// DSI PLL and PHY transition timings copied from ST's board initialization for
+// this 800x480 two-lane video-mode link.
 constexpr hal::DsiPllConfig dsi_pll_config = {.input_divider = 2, .loop_multiplier = 125, .output_divider = 0};
 constexpr hal::DsiPhyTimings dsi_phy_timings = {.clock_lane_hs_to_lp = 35,
                                                 .clock_lane_lp_to_hs = 35,
@@ -58,6 +63,7 @@ constexpr hal::DsiPhyTimings dsi_phy_timings = {.clock_lane_hs_to_lp = 35,
                                                 .data_lane_max_read = 0,
                                                 .stop_wait = 10};
 
+// MIPI DCS command opcodes used by the OTM8009A panel driver.
 constexpr uint8_t otm8009a_cmd_nop = 0x00;
 constexpr uint8_t otm8009a_cmd_read_id1 = 0xDA;
 constexpr uint8_t otm8009a_cmd_sleep_out = 0x11;
@@ -76,6 +82,7 @@ constexpr uint8_t otm8009a_id1 = 0x40;
 constexpr uint8_t otm8009a_color_mode_rgb888 = 0x77;
 constexpr uint8_t otm8009a_landscape_memory_access = 0x60;
 
+// MIPI DCS command opcodes used by the NT35510 panel driver.
 constexpr uint8_t nt35510_id2 = 0x80;
 constexpr uint8_t nt35510_cmd_read_id2 = 0xDB;
 constexpr uint8_t nt35510_cmd_sleep_out = 0x11;
@@ -96,6 +103,9 @@ constexpr uint8_t nt35510_cmd_write_cabc_minimum_brightness = 0x5E;
 constexpr uint8_t nt35510_color_mode_rgb888 = 0x77;
 constexpr uint8_t nt35510_landscape_memory_access = 0x60;
 
+// OTM8009A vendor register payloads from ST's otm8009a component driver. These
+// bytes program panel power, source/gate timing, gamma, command-page selection,
+// orientation, active address window, and CABC/backlight behavior.
 constexpr uint8_t lcd_reg_data1[] = {0x80, 0x09, 0x01};
 constexpr uint8_t lcd_reg_data2[] = {0x80, 0x09};
 constexpr uint8_t lcd_reg_data3[] = {0x00, 0x09, 0x0F, 0x0E, 0x07, 0x10, 0x0B, 0x0A, 0x04, 0x07, 0x0B, 0x08, 0x0F, 0x10, 0x0A, 0x01};
@@ -130,6 +140,9 @@ constexpr uint8_t short_reg_data[] = {
     0xE0, 0xF0, 0x00, 0x55, otm8009a_color_mode_rgb888, 0x7F, 0x2C, 0x02, 0xFF, 0x00, 0x00, 0x00, 0x66, 0xB6, 0x06,
     0xB1, 0x06};
 
+// NT35510 vendor register payloads from ST's nt35510 component driver for the
+// B-LCD40-DSI1 daughterboard. The F0 writes switch command pages; the Bx/BC/CC
+// payloads configure panel power, timing, scan control, and interface behavior.
 constexpr uint8_t nt35510_reg_data1[] = {0x55, 0xAA, 0x52, 0x08, 0x01};
 constexpr uint8_t nt35510_reg_data2[] = {0x03, 0x03, 0x03};
 constexpr uint8_t nt35510_reg_data3[] = {0x46, 0x46, 0x46};
@@ -152,6 +165,7 @@ constexpr uint8_t nt35510_reg_data19[] = {0x03, 0x00, 0x00};
 constexpr uint8_t nt35510_column_address[] = {0x00, 0x00, 0x03, 0x1F};
 constexpr uint8_t nt35510_page_address[] = {0x00, 0x00, 0x01, 0xDF};
 
+// Temporary debug readbacks kept visible to the debugger during LCD bring-up.
 volatile uint8_t lcd_detected_controller = 0;
 volatile uint8_t lcd_nt35510_read_id2 = 0;
 volatile uint8_t lcd_otm8009a_read_id1 = 0;
@@ -442,10 +456,21 @@ FrameBuffer& Display::get_buffer()
 	return buffer;
 }
 
+void Display::set_background_color(uint8_t red, uint8_t green, uint8_t blue)
+{
+	background_red = red;
+	background_green = green;
+	background_blue = blue;
+
+	if (ltdc_initialized)
+	{
+		hal::ltdc.set_background_color(background_red, background_green, background_blue);
+		hal::ltdc.reload();
+	}
+}
+
 void Display::init()
 {
-	buffer.fill_test_pattern();
-
 	hal::rcc.enable_hse();
 	while (!hal::rcc.is_hse_ready())
 	{
@@ -502,12 +527,13 @@ void Display::configure_ltdc(const hal::DisplayTimings& timings)
 {
 	hal::ltdc.set_timing_registers(timings);
 	hal::ltdc.set_dsi_video_polarities();
-	hal::ltdc.set_background_color(ltdc_background_red, ltdc_background_green, ltdc_background_blue);
+	hal::ltdc.set_background_color(background_red, background_green, background_blue);
 
 	hal::ltdc.configure_argb8888_layer(timings, buffer.get_start_address(), FrameBuffer::width, FrameBuffer::height);
 	hal::ltdc.enable_layer();
 	hal::ltdc.reload();
 	hal::ltdc.enable();
+	ltdc_initialized = true;
 }
 
 }  // namespace bsp
