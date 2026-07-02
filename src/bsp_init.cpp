@@ -1,5 +1,6 @@
 #include "bsp_init.hpp"
 
+#include "bsp_core.hpp"
 #include "bsp_internals.hpp"
 #include "hal_rcc.hpp"
 #include "hal_system_control.hpp"
@@ -9,6 +10,7 @@ namespace bsp
 
 void init()
 {
+	register_1ms_callback(nullptr);
 	hal::system_control.enable_systick();
 
 	hal::rcc.enable_gpio_d();
