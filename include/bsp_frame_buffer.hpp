@@ -18,7 +18,7 @@ public:
 	void fill_test_pattern();
 
 	static constexpr uint32_t width = 100;
-	static constexpr uint32_t height = 100;
+	static constexpr uint32_t height = 480;
 
 private:
 	std::array<std::array<pixel_t, width>, height> buffer;

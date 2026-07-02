@@ -2,6 +2,12 @@
 #define INCLUDE_BSP_DISPLAY_HPP
 
 #include "bsp_frame_buffer.hpp"
+
+namespace hal
+{
+struct DisplayTimings;
+}
+
 namespace bsp
 {
 
@@ -15,7 +21,7 @@ public:
 	void init();
 
 private:
-	void configure_ltdc();
+	void configure_ltdc(const hal::DisplayTimings& timings);
 
 	FrameBuffer buffer;
 };
