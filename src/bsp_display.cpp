@@ -42,8 +42,8 @@ constexpr hal::DisplayTimings otm8009a_timings = {.hsync_width = 2,
                                                   .active_width = 800,
                                                   .active_height = 480};
 
-// NT35510 timing set from ST's B-LCD40-DSI1 support. This board variant uses a
-// tall vertical blanking interval; using OTM8009A vertical timings leaves it black.
+// ST's Discovery LCD code uses the same NT35510 timing values for portrait and
+// landscape. Orientation is handled by the panel's address-window settings.
 constexpr hal::DisplayTimings nt35510_timings = {.hsync_width = 2,
                                                  .vsync_width = 120,
                                                  .horizontal_back_porch = 34,
@@ -218,7 +218,7 @@ bool write_panel_command(uint8_t command, const uint8_t* parameters, uint32_t pa
 {
 	if (parameter_count == 0)
 	{
-		return hal::dsi.dcs_short_write(dsi_virtual_channel_id, command, *parameters);
+		return hal::dsi.dcs_short_write(dsi_virtual_channel_id, command);
 	}
 
 	return hal::dsi.dcs_long_write(dsi_virtual_channel_id, command, parameters, parameter_count);
@@ -232,6 +232,12 @@ bool write_panel_command(uint8_t command, const uint8_t (&parameters)[N])
 
 bool write_panel_parameter(uint8_t command, uint8_t parameter)
 {
+	if (command == otm8009a_cmd_nop || command == otm8009a_cmd_sleep_out || command == otm8009a_cmd_display_on || command == otm8009a_cmd_memory_write ||
+	    command == nt35510_cmd_sleep_out || command == nt35510_cmd_display_on || command == nt35510_cmd_memory_write)
+	{
+		return hal::dsi.dcs_short_write(dsi_virtual_channel_id, command);
+	}
+
 	return hal::dsi.dcs_short_write(dsi_virtual_channel_id, command, parameter);
 }
 
