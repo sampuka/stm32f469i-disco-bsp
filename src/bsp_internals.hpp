@@ -10,6 +10,7 @@ inline hal::GpioPin ld1(hal::gpio_g, 6);
 inline hal::GpioPin ld2(hal::gpio_d, 4);
 inline hal::GpioPin ld3(hal::gpio_d, 5);
 inline hal::GpioPin ld4(hal::gpio_k, 3);
+inline hal::GpioPin user_button(hal::gpio_c, 13);
 
 }  // namespace bsp
 

@@ -17,6 +17,7 @@ void init()
 	hal::system_control.enable_systick(hal::Rcc::system_clock_hz);
 
 	hal::rcc.enable_gpio_d();
+	hal::rcc.enable_gpio_c();
 	hal::rcc.enable_gpio_g();
 	hal::rcc.enable_gpio_k();
 
@@ -28,6 +29,7 @@ void init()
 	ld2.set_output_high();
 	ld3.set_output_high();
 	ld4.set_output_high();
+	user_button.setup_for_input(hal::Gpio::Pull::PULLDOWN);
 
 	init_sdram();
 }
