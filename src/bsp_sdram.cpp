@@ -17,13 +17,15 @@ constexpr uint8_t fmc_alternate_function = 12;
 // UM1932 identifies the external memory as a 128-Mbit MT48LC4M32B2B5-7 SDRAM
 // on FMC bank 1. ST's STM32F469I Discovery BSP drives it with a 90 MHz SDCLK;
 // these timing fields are the corresponding FMC cycle counts.
-constexpr hal::SdramTiming sdram_timing = {.load_to_active_delay = 2,
-                                           .exit_self_refresh_delay = 7,
-                                           .self_refresh_time = 4,
-                                           .row_cycle_delay = 7,
-                                           .write_recovery_time = 2,
-                                           .row_precharge_delay = 2,
-                                           .row_to_column_delay = 2};
+constexpr hal::SdramTiming sdram_timing = {
+	.load_to_active_delay = 2,
+	.exit_self_refresh_delay = 7,
+	.self_refresh_time = 4,
+	.row_cycle_delay = 7,
+	.write_recovery_time = 2,
+	.row_precharge_delay = 2,
+	.row_to_column_delay = 2,
+};
 
 // ST's board BSP uses this FMC refresh counter for the 90 MHz SDRAM clock.
 constexpr uint32_t sdram_refresh_count = 0x0569;

@@ -18,11 +18,7 @@ public:
 
 	bool write(uint8_t address_7bit, const uint8_t* data, uint32_t size);
 	bool read(uint8_t address_7bit, uint8_t* data, uint32_t size);
-	bool write_read(uint8_t address_7bit,
-	                const uint8_t* write_data,
-	                uint32_t write_size,
-	                uint8_t* read_data,
-	                uint32_t read_size);
+	bool write_read(uint8_t address_7bit, const uint8_t* write_data, uint32_t write_size, uint8_t* read_data, uint32_t read_size);
 
 private:
 	hal::GpioPin scl;

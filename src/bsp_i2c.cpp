@@ -44,11 +44,7 @@ bool I2cBus::read(uint8_t address_7bit, uint8_t* data, uint32_t size)
 	return i2c.read(address_7bit, data, size);
 }
 
-bool I2cBus::write_read(uint8_t address_7bit,
-                        const uint8_t* write_data,
-                        uint32_t write_size,
-                        uint8_t* read_data,
-                        uint32_t read_size)
+bool I2cBus::write_read(uint8_t address_7bit, const uint8_t* write_data, uint32_t write_size, uint8_t* read_data, uint32_t read_size)
 {
 	return i2c.write_read(address_7bit, write_data, write_size, read_data, read_size);
 }

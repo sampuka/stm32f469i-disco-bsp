@@ -29,6 +29,8 @@ BraceWrapping: {
 }
 
 AllowShortFunctionsOnASingleLine: false
+BinPackArguments: false
+InsertNewlineAtEOF: true
 IndentAccessModifiers: false
 AccessModifierOffset: -4
 

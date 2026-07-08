@@ -33,14 +33,8 @@ enum class LcdController
 };
 
 // OTM8009A timing set from ST's Discovery BSP for the original 800x480 DSI LCD.
-constexpr hal::DisplayTimings otm8009a_timings = {.hsync_width = 2,
-                                                  .vsync_width = 1,
-                                                  .horizontal_back_porch = 34,
-                                                  .vertical_back_porch = 15,
-                                                  .horizontal_front_porch = 34,
-                                                  .vertical_front_porch = 16,
-                                                  .active_width = 800,
-                                                  .active_height = 480};
+constexpr hal::DisplayTimings otm8009a_timings = {
+	.hsync_width = 2, .vsync_width = 1, .horizontal_back_porch = 34, .vertical_back_porch = 15, .horizontal_front_porch = 34, .vertical_front_porch = 16, .active_width = 800, .active_height = 480};
 
 // ST's Discovery LCD code uses the same NT35510 timing values for portrait and
 // landscape. Orientation is handled by the panel's address-window settings.
@@ -56,12 +50,7 @@ constexpr hal::DisplayTimings nt35510_timings = {.hsync_width = 2,
 // DSI PLL and PHY transition timings copied from ST's board initialization for
 // this 800x480 two-lane video-mode link.
 constexpr hal::DsiPllConfig dsi_pll_config = {.input_divider = 2, .loop_multiplier = 125, .output_divider = 0};
-constexpr hal::DsiPhyTimings dsi_phy_timings = {.clock_lane_hs_to_lp = 35,
-                                                .clock_lane_lp_to_hs = 35,
-                                                .data_lane_hs_to_lp = 35,
-                                                .data_lane_lp_to_hs = 35,
-                                                .data_lane_max_read = 0,
-                                                .stop_wait = 10};
+constexpr hal::DsiPhyTimings dsi_phy_timings = {.clock_lane_hs_to_lp = 35, .clock_lane_lp_to_hs = 35, .data_lane_hs_to_lp = 35, .data_lane_lp_to_hs = 35, .data_lane_max_read = 0, .stop_wait = 10};
 
 // MIPI DCS command opcodes used by the OTM8009A panel driver.
 constexpr uint8_t otm8009a_cmd_nop = 0x00;
@@ -134,11 +123,10 @@ constexpr uint8_t lcd_reg_data25[] = {0xFF, 0xFF, 0xFF};
 constexpr uint8_t lcd_reg_data26[] = {0x00, 0x00, 0x03, 0x1F};
 constexpr uint8_t lcd_reg_data27[] = {0x00, 0x00, 0x01, 0xDF};
 
-constexpr uint8_t short_reg_data[] = {
-    0x00, 0x00, 0x80, 0x30, 0x8A, 0x40, 0xB1, 0xA9, 0x91, 0x34, 0xB4, 0x50, 0x4E, 0x81, 0x66, 0xA1, 0x08,
-    0x92, 0x01, 0x95, 0x94, 0x33, 0xA3, 0x1B, 0x82, 0x83, 0x83, 0x0E, 0xA6, 0xA0, 0xB0, 0xC0, 0xD0, 0x90,
-    0xE0, 0xF0, 0x00, 0x55, otm8009a_color_mode_rgb888, 0x7F, 0x2C, 0x02, 0xFF, 0x00, 0x00, 0x00, 0x66, 0xB6, 0x06,
-    0xB1, 0x06};
+constexpr uint8_t short_reg_data[] = {0x00, 0x00, 0x80, 0x30, 0x8A, 0x40, 0xB1, 0xA9, 0x91, 0x34, 0xB4, 0x50, 0x4E,
+                                      0x81, 0x66, 0xA1, 0x08, 0x92, 0x01, 0x95, 0x94, 0x33, 0xA3, 0x1B, 0x82, 0x83,
+                                      0x83, 0x0E, 0xA6, 0xA0, 0xB0, 0xC0, 0xD0, 0x90, 0xE0, 0xF0, 0x00, 0x55, otm8009a_color_mode_rgb888,
+                                      0x7F, 0x2C, 0x02, 0xFF, 0x00, 0x00, 0x00, 0x66, 0xB6, 0x06, 0xB1, 0x06};
 
 // NT35510 vendor register payloads from ST's nt35510 component driver for the
 // B-LCD40-DSI1 daughterboard. The F0 writes switch command pages; the Bx/BC/CC
@@ -232,8 +220,8 @@ bool write_panel_command(uint8_t command, const uint8_t (&parameters)[N])
 
 bool write_panel_parameter(uint8_t command, uint8_t parameter)
 {
-	if (command == otm8009a_cmd_nop || command == otm8009a_cmd_sleep_out || command == otm8009a_cmd_display_on || command == otm8009a_cmd_memory_write ||
-	    command == nt35510_cmd_sleep_out || command == nt35510_cmd_display_on || command == nt35510_cmd_memory_write)
+	if (command == otm8009a_cmd_nop || command == otm8009a_cmd_sleep_out || command == otm8009a_cmd_display_on || command == otm8009a_cmd_memory_write || command == nt35510_cmd_sleep_out ||
+	    command == nt35510_cmd_display_on || command == nt35510_cmd_memory_write)
 	{
 		return hal::dsi.dcs_short_write(dsi_virtual_channel_id, command);
 	}
