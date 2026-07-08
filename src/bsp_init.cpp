@@ -1,6 +1,7 @@
 #include "bsp_init.hpp"
 
 #include "bsp_core.hpp"
+#include "bsp_i2c.hpp"
 #include "bsp_internals.hpp"
 #include "bsp_sdram.hpp"
 #include "hal_rcc.hpp"
@@ -30,6 +31,7 @@ void init()
 	ld3.set_output_high();
 	ld4.set_output_high();
 	user_button.setup_for_input(hal::Gpio::Pull::PULLDOWN);
+	i2c1.init();
 
 	init_sdram();
 }
